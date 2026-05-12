@@ -1,5 +1,15 @@
 # React + Vite
 
+## TMDB setup
+
+Create a `.env` file in this folder and add your TMDB v3 API key:
+
+```env
+VITE_TMDB_API_KEY=your_tmdb_v3_api_key
+```
+
+The app loads movie posters, release dates, languages, TMDB scores, ratings, genres, cast, and director data from The Movie Database API.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

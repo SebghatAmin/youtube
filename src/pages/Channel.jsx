@@ -1,6 +1,14 @@
 import VideoCard from '../components/VideoCard'
 
-function Channel({ director, movies }) {
+function Channel({ apiError, director, isLoading, movies }) {
+  if (!movies.length) {
+    return (
+      <p className="rounded-lg bg-neutral-100 p-4 font-semibold text-neutral-700">
+        {isLoading ? 'Loading movies from TMDB...' : apiError || 'No movies found.'}
+      </p>
+    )
+  }
+
   const directorName = director || movies[0].director
   const directorMovies = movies.filter((movie) => movie.director === directorName)
   const fallbackMovies = directorMovies.length ? directorMovies : movies.slice(0, 4)

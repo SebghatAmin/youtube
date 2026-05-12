@@ -1,9 +1,9 @@
 import {
-  getInitials,
   getPoster,
   getPosterFallback,
   getPosterPlaceholder,
-} from "../data/movies";
+  getInitials,
+} from "../services/tmdb";
 
 function VideoCard({ movie, horizontal = false }) {
   return (
@@ -12,7 +12,7 @@ function VideoCard({ movie, horizontal = false }) {
     >
       <a
         href={`#/watch?v=${movie.id}`}
-        className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100"
+        className="relative block aspect-[2/3] overflow-hidden rounded-xl bg-neutral-100"
       >
         <img
           src={getPoster(movie)}
@@ -32,7 +32,7 @@ function VideoCard({ movie, horizontal = false }) {
           className="h-full w-full object-cover transition duration-200 group-hover:scale-105"
         />
         <span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-xs font-semibold text-white">
-          {movie.duration}
+          {movie.rating}
         </span>
       </a>
 
@@ -58,7 +58,10 @@ function VideoCard({ movie, horizontal = false }) {
             {movie.director}
           </a>
           <p className="text-sm text-neutral-600">
-            IMDb {movie.imdbRating} / 10 - {movie.year}
+            {movie.releaseDate} - {movie.language}
+          </p>
+          <p className="text-sm text-neutral-600">
+            TMDB {movie.score} / 10 - {movie.rating}
           </p>
         </div>
       </div>

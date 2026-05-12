@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react'
 import VideoCard from '../components/VideoCard'
-import { searchMovies } from '../data/movies'
+import { searchMovies } from '../services/tmdb'
 
-function Search({ query, movies }) {
-  const [remoteSearch, setRemoteSearch] = useState({ query: '', results: [] })
+function Search({ apiError, query, movies }) {
+  const [remoteSearch, setRemoteSearch] = useState({ error: '', query: '', results: [] })
   const normalizedQuery = query.toLowerCase()
   const localResults = movies.filter((movie) =>
-    [movie.title, movie.director, movie.category, movie.description, movie.actors].some((value) =>
-      value.toLowerCase().includes(normalizedQuery),
+    [movie.title, movie.director, movie.category, movie.description, movie.actors, movie.language].some((value) =>
+      String(value).toLowerCase().includes(normalizedQuery),
     ),
   )
   const apiResults = remoteSearch.query === query ? remoteSearch.results : []
   const results = apiResults.length ? apiResults : localResults
+  const error = remoteSearch.error || apiError
 
   useEffect(() => {
     let isMounted = true
@@ -22,7 +23,11 @@ function Search({ query, movies }) {
 
     searchMovies(query).then((moviesFromApi) => {
       if (isMounted) {
-        setRemoteSearch({ query, results: moviesFromApi })
+        setRemoteSearch({ error: '', query, results: moviesFromApi })
+      }
+    }).catch((error) => {
+      if (isMounted) {
+        setRemoteSearch({ error: error.message, query, results: [] })
       }
     })
 
@@ -43,6 +48,9 @@ function Search({ query, movies }) {
         {(results.length ? results : movies).map((movie) => (
           <VideoCard key={movie.id} movie={movie} horizontal />
         ))}
+        {!results.length && !movies.length && (
+          <p className="rounded-lg bg-red-50 p-4 font-semibold text-red-700">{error || 'No movies found.'}</p>
+        )}
       </div>
     </section>
   )

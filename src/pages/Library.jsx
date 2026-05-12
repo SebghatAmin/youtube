@@ -1,6 +1,6 @@
 import VideoCard from '../components/VideoCard'
 
-function Library({ movies }) {
+function Library({ apiError, isLoading, movies }) {
   return (
     <section>
       <div className="mb-6">
@@ -15,11 +15,17 @@ function Library({ movies }) {
           </div>
         ))}
       </div>
-      <div className="grid gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {movies.slice(0, 4).map((movie) => (
-          <VideoCard key={movie.id} movie={movie} />
-        ))}
-      </div>
+      {isLoading ? (
+        <p className="rounded-lg bg-neutral-100 p-4 font-semibold text-neutral-700">Loading movies from TMDB...</p>
+      ) : movies.length ? (
+        <div className="grid gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {movies.slice(0, 4).map((movie) => (
+            <VideoCard key={movie.id} movie={movie} />
+          ))}
+        </div>
+      ) : (
+        <p className="rounded-lg bg-red-50 p-4 font-semibold text-red-700">{apiError || 'No movies found.'}</p>
+      )}
     </section>
   )
 }

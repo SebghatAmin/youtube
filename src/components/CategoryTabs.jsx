@@ -1,20 +1,22 @@
-import { categories } from '../data/movies'
+import { defaultCategories } from '../services/tmdb'
 
-function CategoryTabs({ activeCategory, onSelect }) {
+function CategoryTabs({ activeCategory, categories = defaultCategories, onSelect }) {
+  const visibleCategories = categories.length ? categories : defaultCategories
+
   return (
     <div className="no-scrollbar mb-5 flex gap-3 overflow-x-auto">
-      {categories.map((category) => (
+      {visibleCategories.map((category) => (
         <a
-          key={category}
-          href={category === 'All' ? '#/' : `#/category?name=${encodeURIComponent(category)}`}
+          key={category.id}
+          href={category.name === 'All' ? '#/' : `#/category?name=${encodeURIComponent(category.name)}`}
           onClick={() => onSelect?.(category)}
           className={`shrink-0 rounded-lg px-4 py-2 text-sm font-semibold ${
-            activeCategory === category
+            activeCategory === category.name
               ? 'bg-neutral-950 text-white'
               : 'bg-neutral-100 text-neutral-800 hover:bg-neutral-200'
           }`}
         >
-          {category}
+          {category.name}
         </a>
       ))}
     </div>
